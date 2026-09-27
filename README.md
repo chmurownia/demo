@@ -1,0 +1,2 @@
+# Szablon repozytorium dla zespolow
+

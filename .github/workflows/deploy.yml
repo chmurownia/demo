@@ -1,0 +1,39 @@
+name: Wdrożenie na Amazon S3
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write   # Wymagane dla autoryzacji OIDC
+  contents: read    # Wymagane do pobrania kodu repozytorium
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobranie kodu repozytorium
+        uses: actions/checkout@v4
+        
+      - name: Konfiguracja środowiska Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Instalacja MkDocs
+        run: pip install -r requirements.txt
+        
+      - name: Budowanie statycznej strony
+        run: mkdocs build
+        
+      - name: Uwierzytelnienie w chmurze AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # UCZNIOWIE: Podmieńcie poniższy ARN na ten z Waszego konta AWS
+          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsRole
+          aws-region: eu-central-1
+          
+      - name: Publikacja na Amazon S3
+        # UCZNIOWIE: Podmieńcie nazwę bucketu na wyklikaną przez Was
+        run: aws s3 sync site/ s3://unikalna-nazwa-bucketu --delete

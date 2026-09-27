@@ -1,0 +1,20 @@
+site_name: Projekt AWS - Zespół X
+site_description: Nasza wizytówka wdrożona przez CI/CD
+site_author: Zespół X
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+
+nav:
+  - Strona Główna: index.md
+  - Nasz Zespół: zespol.md
+  - Księga Gości: ksiega.md
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_mermaid_custom
