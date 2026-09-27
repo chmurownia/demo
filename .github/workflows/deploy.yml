@@ -1,39 +1,62 @@
-name: Wdrożenie na Amazon S3
+name: Wdrożenie strony demo (S3 + CloudFront)
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
-  id-token: write   # Wymagane dla autoryzacji OIDC
-  contents: read    # Wymagane do pobrania kodu repozytorium
+  id-token: write   # wymagane dla OIDC
+  contents: read
+
+# Zmienne środowiska GitHub (Settings → Environments → demo → Environment variables):
+#   AWS_ROLE_ARN            – ARN roli z Terraform output "github_actions_role_arn"
+#   AWS_REGION              – np. eu-north-1
+#   SITE_BUCKET             – Terraform output "site_bucket_name"
+#   CLOUDFRONT_DISTID       – Terraform output "cloudfront_distribution_id"
+#   GUESTBOOK_API_ENDPOINT  – Terraform output "guestbook_api_endpoint"
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # Wiąże joba ze środowiskiem "demo" — dopiero wtedy widoczne są jego zmienne.
+    environment: demo
     steps:
       - name: Pobranie kodu repozytorium
         uses: actions/checkout@v4
-        
+
       - name: Konfiguracja środowiska Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          
+
       - name: Instalacja MkDocs
         run: pip install -r requirements.txt
-        
+
       - name: Budowanie statycznej strony
-        run: mkdocs build
-        
-      - name: Uwierzytelnienie w chmurze AWS (OIDC)
+        run: mkdocs build --strict
+
+      - name: Wstrzyknięcie adresu API Księgi Gości
+        # Podmienia placeholder __API_URL__ w zbudowanej stronie na prawdziwy
+        # endpoint API Gateway. Dzięki temu URL nie jest zapisany w repo.
+        run: |
+          find site -name '*.html' -type f -exec \
+            sed -i "s|__API_URL__|${{ vars.GUESTBOOK_API_ENDPOINT }}|g" {} +
+
+      - name: Uwierzytelnienie w AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          # UCZNIOWIE: Podmieńcie poniższy ARN na ten z Waszego konta AWS
-          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsRole
-          aws-region: eu-central-1
-          
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Publikacja na Amazon S3
-        # UCZNIOWIE: Podmieńcie nazwę bucketu na wyklikaną przez Was
-        run: aws s3 sync site/ s3://unikalna-nazwa-bucketu --delete
+        run: aws s3 sync site/ "s3://${{ vars.SITE_BUCKET }}" --delete
+
+      - name: Unieważnienie cache CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ vars.CLOUDFRONT_DISTID }}" \
+            --paths "/*"

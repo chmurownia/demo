@@ -1,20 +1,50 @@
-site_name: Projekt AWS - Zespół X
-site_description: Nasza wizytówka wdrożona przez CI/CD
-site_author: Zespół X
+site_name: Chmurownia — Demo
+site_description: Przykładowy efekt warsztatów AWS wdrożony przez CI/CD
+site_author: Maciej
+site_url: https://demo.chmurownia.org
 
 theme:
   name: material
+  language: pl
   palette:
-    primary: indigo
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Tryb ciemny
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Tryb jasny
+  features:
+    - navigation.tabs
+    - navigation.top
+    - content.code.copy
 
 nav:
-  - Strona Główna: index.md
-  - Nasz Zespół: zespol.md
+  - Start: index.md
+  - CV: cv.md
+  - James Kiro: james-kiro.md
   - Księga Gości: ksiega.md
 
 markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_mermaid_custom
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/CHMUROWNIA/demo

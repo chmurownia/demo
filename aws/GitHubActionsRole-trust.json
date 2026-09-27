@@ -4,7 +4,7 @@
         {
             "Effect": "Allow",
             "Principal": {
-                "Federated": "arn:aws:iam::ID_KONTA_AWS:oidc-provider/token.actions.githubusercontent.com"
+                "Federated": "arn:aws:iam::727329303802:oidc-provider/token.actions.githubusercontent.com"
             },
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
@@ -12,7 +12,7 @@
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
                 },
                 "StringLike": {
-                    "token.actions.githubusercontent.com:sub": "repo:CHMUROWNIA/NAZWA_REPOZYTORIUM:*"
+                    "token.actions.githubusercontent.com:sub": "repo:CHMUROWNIA/demo:*"
                 }
             }
         }
