@@ -47,9 +47,10 @@ jobs:
             sed -i "s|__API_URL__|${{ vars.GUESTBOOK_API_ENDPOINT }}|g" {} +
 
       - name: Uwierzytelnienie w AWS (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v4.0.1
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-session-name: samplerolesession
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Publikacja na Amazon S3
