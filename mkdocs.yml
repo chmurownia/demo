@@ -13,14 +13,14 @@ theme:
   language: pl
   palette:
     - scheme: default
-      primary: indigo
-      accent: blue
+      primary: pink
+      accent: red
       toggle:
         icon: material/weather-night
         name: Tryb ciemny
     - scheme: slate
-      primary: indigo
-      accent: blue
+      primary: pink
+      accent: red
       toggle:
         icon: material/weather-sunny
         name: Tryb jasny
@@ -31,7 +31,7 @@ theme:
 
 nav:
   - Start: index.md
-  - CV: cv.md
+  - Maciej Malek: cv.md
   - James Kiro: james-kiro.md
   - Księga Gości: ksiega.md
 

@@ -1,19 +1,20 @@
-# CV — Maciej
+# Maciej Małek
 
 !!! info "O tej stronie"
     To przykładowa wizytówka/CV pokazująca, jak zespół może zaprezentować swoich członków. Uczniowie umieszczą tutaj własne dane.
 
 ## 👋 O mnie
 
-Cześć! Jestem inżynierem chmury i prowadzącym warsztaty *Chmurownia*. Pomagam studentom przejść od pierwszego `git commit` do w pełni działającej, automatycznie wdrażanej aplikacji w chmurze AWS.
+Cześć! Jestem Cloud DevOps inzynierem chmury i prowadzącym warsztaty *Chmurownia*. Pomagam uczniom przejść od pierwszego `git commit` do w pełni działającej, automatycznie wdrażanej aplikacji w chmurze AWS.
 
 ## 🧭 Doświadczenie
 
 | Okres | Rola | Zakres |
 |---|---|---|
-| 2023 – teraz | Cloud Engineer | Projektowanie i automatyzacja infrastruktury AWS (Terraform, CI/CD) |
-| 2020 – 2023 | DevOps Engineer | Pipelines CI/CD, konteneryzacja, monitoring |
-| 2018 – 2020 | Backend Developer | API REST, bazy danych, integracje |
+| 2020 – teraz | Lead AWS DevOps Engineer | Projektowanie i automatyzacja infrastruktury AWS |
+| 2022 – teraz | Trener InfoShare Academy | Szkolenia AWS DevOps i Terraform |
+| 2008 – 2020 | Staff Engineer | Lider techniczny (TechLead) zespołów ds. operacji w regionie EMEA. Migracja aplikacji z serwerowni do rozwiązań chmurowych (cloud-native). |
+| 2003 – 2008 | Systems and Network Engineer | Administracja sieciami i serwerami Unix/Solaris i Linux |
 
 ## 🛠️ Umiejętności
 
@@ -25,22 +26,21 @@ Cześć! Jestem inżynierem chmury i prowadzącym warsztaty *Chmurownia*. Pomaga
 
 - **Infrastructure as Code**
 
-    Terraform, CloudFormation, StackSets
+    Terraform
 
 - **CI/CD**
 
-    GitHub Actions, OIDC, automatyczne wdrożenia
+    AWS CodePipeline, GitHub Actions
 
 - **Języki**
 
-    Python, JavaScript, Bash, HCL
+    Python, Bash, HCL
 
 </div>
 
 ## 🎓 Wykształcenie
 
-- **Informatyka** — studia inżynierskie
-- Liczne certyfikaty AWS i szkolenia branżowe
+- **Telekomunikacja** — magister inżynier, AGH
 
 ## 📫 Kontakt
 
