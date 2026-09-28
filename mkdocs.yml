@@ -3,6 +3,11 @@ site_description: Przykładowy efekt warsztatów AWS wdrożony przez CI/CD
 site_author: Maciej
 site_url: https://demo.chmurownia.org
 
+# S3 nie ma pojęcia "katalogu" ani domyślnego pliku index w podścieżkach.
+# Domyślne URL-e katalogowe MkDocs (/cv/) nie ładują się z S3, więc generujemy
+# płaskie pliki .html (/cv.html), które S3 serwuje bez dodatkowej konfiguracji.
+use_directory_urls: false
+
 theme:
   name: material
   language: pl

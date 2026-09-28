@@ -96,6 +96,18 @@ GitHub Actions zbuduje stronę, wstrzyknie adres API Księgi Gości, wgra pliki 
 
 Pliki `aws/GitHubActionsRole-trust.json` i `aws/GitHubActionsRole-policy.json` są **referencyjne** — pokazują, jak wyglądałaby konfiguracja robiona ręcznie (tak jak robią to uczniowie na warsztatach). W tym demo tożsamą rolę, politykę i OIDC provider tworzy Terraform (`github_oidc.tf`), więc to on jest źródłem prawdy.
 
+## Uwaga o formacie `sub` (immutable subject claims)
+
+To repozytorium powstało po 15 lipca 2026, więc GitHub używa „niezmiennego" formatu identyfikatora OIDC z numerycznymi ID organizacji i repozytorium:
+
+```
+repo:chmurownia@331737546/demo@1391044409:environment:demo
+```
+
+Polityka zaufania roli IAM (`github_oidc.tf`) dopasowuje dokładnie ten `sub`. Numeryczne ID są ustawione jako zmienne `github_org_id` i `github_repo_id`. Użycie starego formatu (`repo:org/repo:*`) kończy się błędem `Not authorized to perform sts:AssumeRoleWithWebIdentity`.
+
+Workflow ustawia `environment: demo`, dlatego `sub` zawiera `:environment:demo` — zaufanie jest ograniczone tylko do wdrożeń z tego środowiska.
+
 ## Uwaga o thumbprint OIDC
 
 Od lipca 2023 AWS weryfikuje endpoint OIDC GitHuba na podstawie własnej biblioteki zaufanych CA, więc thumbprint nie jest już używany do walidacji. Pole `thumbprint_list` pozostaje wymagane przez API, dlatego podana jest znana wartość GitHuba jako wypełnienie schematu.
