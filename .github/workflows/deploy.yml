@@ -49,8 +49,9 @@ jobs:
       - name: Uwierzytelnienie w AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v4.0.1
         with:
+          audience: sts.amazonaws.com
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          role-session-name: samplerolesession
+          role-session-name: githubactionsession
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Publikacja na Amazon S3
