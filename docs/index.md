@@ -14,7 +14,7 @@
       telemetries: ["performance","errors","http"] ,
       allowCookies: true ,
       enableXRay: false ,
-      signing: true // If you have a public resource policy and wish to send unsigned requests please set this to false
+      signing: false // If you have a public resource policy and wish to send unsigned requests please set this to false
     }
   );
 </script>

@@ -13,14 +13,14 @@ theme:
   language: pl
   palette:
     - scheme: default
-      primary: pink
-      accent: red
+      primary: brown
+      accent: green
       toggle:
         icon: material/weather-night
         name: Tryb ciemny
     - scheme: slate
-      primary: pink
-      accent: red
+      primary: brown
+      accent: green
       toggle:
         icon: material/weather-sunny
         name: Tryb jasny
