@@ -27,11 +27,11 @@ Co najważniejsze — **nie klikałem niczego ręcznie w konsoli AWS**. Cała in
 
 ## Co uczniowie zbudują na warsztatach
 
-- [x] Statyczną stronę WWW (wizytówkę zespołu)
-- [x] Hosting na Amazon S3 + dystrybucja przez CloudFront
-- [x] Certyfikat HTTPS (ACM) i własną domenę (Route 53)
-- [x] Automatyczne wdrożenia z GitHub Actions (OIDC, bez kluczy)
-- [x] Dynamiczną Księgę Gości (API Gateway + Lambda + DynamoDB)
+- ✅ Statyczną stronę WWW (wizytówkę zespołu)
+- ✅ Hosting na Amazon S3 + dystrybucja przez CloudFront
+- ✅ Certyfikat HTTPS (ACM) i własną domenę (Route 53)
+- ✅ Automatyczne wdrożenia z GitHub Actions (OIDC, bez kluczy)
+- ✅ Dynamiczną Księgę Gości (API Gateway + Lambda + DynamoDB)
 
 ## Architektura rozwiązania
 
