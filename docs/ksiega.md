@@ -115,7 +115,14 @@ Zostaw wiadomość! Ten formularz działa na żywo: zapisuje dane w **DynamoDB**
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ author, message }),
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setStatus(
+          data.error || 'Wystąpił błąd podczas zapisu. Spróbuj ponownie.',
+          'error'
+        );
+        return;
+      }
       authorEl.value = '';
       messageEl.value = '';
       setStatus('Dziękujemy! Twój wpis został zapisany.', 'ok');
