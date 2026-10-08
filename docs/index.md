@@ -37,42 +37,8 @@ Co najważniejsze — **nie klikałem niczego ręcznie w konsoli AWS**. Cała in
 
 Poniższy diagram pokazuje, jak połączone są wszystkie elementy tego demo.
 
-```mermaid
-flowchart TB
-    Dev["👩‍💻 Programista<br/>git push"] --> GH["GitHub Repo<br/>CHMUROWNIA/demo"]
-    GH --> GHA["GitHub Actions<br/>(build MkDocs)"]
-    GHA -->|"OIDC AssumeRole<br/>(bez kluczy)"| IAM["IAM Role<br/>GitHubActionsRole"]
-    IAM --> S3["🪣 Amazon S3<br/>(pliki strony)"]
-    IAM --> INV["CloudFront<br/>Invalidation"]
-
-    User["🌍 Użytkownik"] -->|"HTTPS"| R53["Route 53<br/>demo.chmurownia.org"]
-    R53 --> CF["CloudFront<br/>(CDN + TLS)"]
-    ACM["ACM<br/>Certyfikat TLS"] -.-> CF
-    CF -->|"OAC"| S3
-
-    User -->|"fetch()"| APIGW["API Gateway<br/>(HTTP API)"]
-    APIGW --> L["AWS Lambda<br/>(Księga Gości)"]
-    L --> DDB["🗄️ DynamoDB<br/>(wpisy gości)"]
-
-    subgraph "Warstwa statyczna"
-        S3
-        CF
-        ACM
-        R53
-    end
-
-    subgraph "Warstwa dynamiczna (Księga Gości)"
-        APIGW
-        L
-        DDB
-    end
-
-    subgraph "CI/CD"
-        GH
-        GHA
-        IAM
-    end
-```
+![Architektura rozwiązania](architektura.svg#only-light)
+![Architektura rozwiązania](architektura-motyw.svg#only-dark)
 
 ## Użyte usługi AWS
 
