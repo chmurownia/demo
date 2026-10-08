@@ -31,11 +31,50 @@ MAX_ENTRIES = int(os.environ.get("MAX_ENTRIES", "50"))
 MAX_AUTHOR_LEN = 60
 MAX_MESSAGE_LEN = 500
 
+# Bedrock Guardrails configuration for content moderation.
+GUARDRAIL_ID = os.environ.get("GUARDRAIL_ID", "")
+GUARDRAIL_VERSION = os.environ.get("GUARDRAIL_VERSION", "")
+GUARDRAIL_BLOCKED_MESSAGE = os.environ.get(
+    "GUARDRAIL_BLOCKED_MESSAGE",
+    "Twoja wiadomość została zablokowana przez automatyczny filtr "
+    "antyspamowy lub system moderacji treści, ponieważ system rozpoznał "
+    "w niej słowa uznane za wulgarne, obraźliwe lub niezgodne z regulaminem.",
+)
+
 # Single partition groups all entries; sort key orders them by time.
 PARTITION_VALUE = "guestbook"
 
-dynamodb = boto3.resource("dynamodb", region_name=os.environ.get("AWS_REGION_NAME"))
+_region = os.environ.get("AWS_REGION_NAME")
+dynamodb = boto3.resource("dynamodb", region_name=_region)
 table = dynamodb.Table(TABLE_NAME)
+bedrock_runtime = boto3.client("bedrock-runtime", region_name=_region)
+
+
+def _is_blocked_by_guardrail(text: str) -> bool:
+    """Check a message against the Bedrock Guardrail content filter.
+
+    Args:
+        text: The user-submitted message to moderate.
+
+    Returns:
+        bool: True if the guardrail intervened (message must be rejected),
+            False if the content is allowed.
+    """
+    if not GUARDRAIL_ID or not GUARDRAIL_VERSION:
+        logger.warning("Guardrail not configured; skipping moderation")
+        return False
+
+    response = bedrock_runtime.apply_guardrail(
+        guardrailIdentifier=GUARDRAIL_ID,
+        guardrailVersion=GUARDRAIL_VERSION,
+        source="INPUT",
+        content=[{"text": {"text": text}}],
+    )
+    action = response.get("action", "")
+    if action == "GUARDRAIL_INTERVENED":
+        logger.info("Guardrail blocked a guest book message")
+        return True
+    return False
 
 
 class _DecimalEncoder(json.JSONEncoder):
@@ -113,6 +152,14 @@ def _post_entry(raw_body: str | None) -> dict[str, Any]:
 
     if len(author) > MAX_AUTHOR_LEN or len(message) > MAX_MESSAGE_LEN:
         return _response(413, {"error": "Author or message too long"})
+
+    # Reject the entire message if the moderation guardrail intervenes.
+    try:
+        if _is_blocked_by_guardrail(message):
+            return _response(400, {"error": GUARDRAIL_BLOCKED_MESSAGE})
+    except ClientError:
+        logger.exception("Guardrail moderation call failed")
+        return _response(502, {"error": "Content moderation service unavailable"})
 
     timestamp = int(time.time() * 1000)  # epoch milliseconds
     item = {

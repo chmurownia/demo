@@ -75,3 +75,9 @@ variable "lambda_source_dir" {
   type        = string
   default     = "../lambda/guestbook"
 }
+
+variable "guardrail_blocked_message" {
+  description = "Message returned to the user when Bedrock Guardrails blocks a guest book entry"
+  type        = string
+  default     = "Twoja wiadomość została zablokowana przez automatyczny filtr antyspamowy lub system moderacji treści, ponieważ system rozpoznał w niej słowa uznane za wulgarne, obraźliwe lub niezgodne z regulaminem."
+}

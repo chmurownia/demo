@@ -62,6 +62,15 @@ data "aws_iam_policy_document" "guestbook_permissions" {
     ]
     resources = [aws_dynamodb_table.guestbook.arn]
   }
+
+  statement {
+    sid    = "AllowApplyGuardrail"
+    effect = "Allow"
+    actions = [
+      "bedrock:ApplyGuardrail",
+    ]
+    resources = [aws_bedrock_guardrail.guestbook.guardrail_arn]
+  }
 }
 
 resource "aws_iam_role" "guestbook" {
@@ -95,15 +104,19 @@ resource "aws_lambda_function" "guestbook" {
 
   environment {
     variables = {
-      GUESTBOOK_TABLE = aws_dynamodb_table.guestbook.name
-      MAX_ENTRIES     = "50"
-      AWS_REGION_NAME = var.aws_region
+      GUESTBOOK_TABLE           = aws_dynamodb_table.guestbook.name
+      MAX_ENTRIES               = "50"
+      AWS_REGION_NAME           = var.aws_region
+      GUARDRAIL_ID              = aws_bedrock_guardrail.guestbook.guardrail_id
+      GUARDRAIL_VERSION         = aws_bedrock_guardrail_version.guestbook.version
+      GUARDRAIL_BLOCKED_MESSAGE = var.guardrail_blocked_message
     }
   }
 
   depends_on = [
     aws_iam_role_policy.guestbook,
     aws_cloudwatch_log_group.guestbook,
+    aws_bedrock_guardrail_version.guestbook,
   ]
 
   tags = {
